@@ -85,6 +85,9 @@ namespace modifies String {
 		number localDate = date + localOffset;
 		return Date.localDate(localDate).format(Config.DateFormat);
 	}
+	function formatDateTZ( number date, string zoneName ) {
+		return .tzLocalDate(date, zoneName).format(Config.DateFormat);
+	}
 	/**
 	 * @function formatDateTime
 	 * @declaration function formatDateTime( number date )
@@ -99,23 +102,55 @@ namespace modifies String {
 		return Date.localDate(localDate).format(Config.DateFormat + ' %H:%M');
 	}
 	function formatDateTimeTZ( number date, string zoneName ) {
-		string dateString;
+		return .tzLocalDate(date, zoneName).format(Config.DateFormat + ' %H:%M');
+	}
+	/**
+	 * @function tzOffset
+	 * @declaration function tzOffset( string zoneName )
+	 * @brief obtain offset from GMT for timezone
+	 * @param string zoneName time zont string
+	 * @return seconds offset from GMT
+	 */
+	function tzOffset(string zoneName) {
+		number gmtOffset;
 		string oldZone = Sys.env.read("TZ");
-		//this tm_gmtoff should be removed once we fixed the database's UTC time
-		number localDate = date + Date.localDate(date).tm_gmtoff;
 
 		if(zoneName.length() > 0 ){
 			Sys.env.write("TZ",zoneName);
 		}
-		dateString = Date.localDate(localDate).format(Config.DateFormat + ' %H:%M');
+		gmtOffset = Date.timezone();
 		if(oldZone.length() > 0){
 			Sys.env.write("TZ",oldZone);
 		}
 		else{
 			Sys.env.del("TZ");
 		}
-		return dateString;
+		return gmtOffset;
 	}
+	/**
+	 * @function tzLocalDate
+	 * @declaration function tzLocalDate( number date )
+	 * @brief Convert a GMT timestamp Date object at specified TZ
+	 * @param number date The GMT timestamp
+	 * @return A Date object
+	 */
+	function tzLocalDate(number date, string zoneName) {
+		object dateAtTZ;
+		string oldZone = Sys.env.read("TZ");
+
+		if(zoneName.length() > 0 ){
+			Sys.env.write("TZ",zoneName);
+		}
+		dateAtTZ = Date.localDate(date);
+		if(oldZone.length() > 0){
+			Sys.env.write("TZ",oldZone);
+		}
+		else{
+			Sys.env.del("TZ");
+		}
+		return dateAtTZ;
+	}
+
 	/**
 	 * @function formatTime
 	 * @declaration function formatTime( number date )
