@@ -163,6 +163,9 @@ namespace modifies String {
 		number localDate = date + localOffset;
 		return Date.localDate(localDate).format('%H:%M');
 	}
+	function formatTimeTZ( number date, string zoneName ) {
+		return .tzLocalDate(date, zoneName).format('%H:%M');
+	}
 	/**
 	 * @function dateStringToTimestamp
 	 * @declaration function dateStringToTimestamp( string time )
