@@ -105,29 +105,6 @@ namespace modifies String {
 		return .tzLocalDate(date, zoneName).format(Config.DateFormat + ' %H:%M');
 	}
 	/**
-	 * @function tzOffset
-	 * @declaration function tzOffset( string zoneName )
-	 * @brief obtain offset from GMT for timezone
-	 * @param string zoneName time zont string
-	 * @return seconds offset from GMT
-	 */
-	function tzOffset(string zoneName) {
-		number gmtOffset;
-		string oldZone = Sys.env.read("TZ");
-
-		if(zoneName.length() > 0 ){
-			Sys.env.write("TZ",zoneName);
-		}
-		gmtOffset = Date.timezone();
-		if(oldZone.length() > 0){
-			Sys.env.write("TZ",oldZone);
-		}
-		else{
-			Sys.env.del("TZ");
-		}
-		return gmtOffset;
-	}
-	/**
 	 * @function tzLocalDate
 	 * @declaration function tzLocalDate( number date )
 	 * @brief Convert a GMT timestamp Date object at specified TZ
